@@ -1,4 +1,4 @@
-from math import radians, cos, sin, asin, sqrt
+import numpy as np
 import pandas as pd
 
 zip_df = pd.read_csv('zip_w_lat-long.csv')
@@ -24,15 +24,16 @@ def haversine_distance(lat1, long1, lat2, long2):
     Calculate the great circle distance between two points 
     on the earth (specified in decimal degrees)
     """
+    MILES = 3959 # Radius of Earth in mi
+
     # convert decimal degrees to radians 
-    lat1, long1, lat2, long2 = map(radians, [lat1, long1, lat2, long2])
+    lat1, long1, lat2, long2 = map(np.deg2rad, [lat1, long1, lat2, long2])
 
     # haversine formula 
-    dlon = long2 - long1
+    dlong = long2 - long1
     dlat = lat2 - lat1
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
-    r = 3959 # Radius of earth in mi
-    return c * r
+    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlong/2)**2
+    c = 2 * np.arcsin(np.sqrt(a)) 
+    return c * MILES
 
 print(find_zips('40205'))
