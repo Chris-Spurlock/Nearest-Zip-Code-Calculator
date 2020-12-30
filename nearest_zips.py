@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
 
-zip_df = pd.read_csv('zip_w_lat-long.csv')
-
-# Todo: export results to csv and db table
 # Todo: try block to ensure zip is valid
 def find_zips(zipcode):
     """
@@ -20,11 +17,10 @@ def find_zips(zipcode):
     nearest_zips['target_zipcode'] = str(target_zip)
     nearest_zips = nearest_zips.drop(['lat', 'long'], axis=1)
     nearest_zips.columns = ['nearby_zipcode', 'distance', 'target_zipcode']
-    nearest_zips = nearest_zips[['target_zipcode', 'nearby_zipcode', 'distance']] # could probably do this bit more efficiently
+    nearest_zips = nearest_zips[['target_zipcode', 'nearby_zipcode', 'distance']]
 
-    return nearest_zips
+    nearest_zips.to_csv(f'nearest_zips_to_{target_zip}.csv', index=False)
 
-# Calculate distance between two sets of lat/long coordinates
 # Credit: https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine_distance(lat1, long1, lat2, long2):
     """
@@ -37,11 +33,13 @@ def haversine_distance(lat1, long1, lat2, long2):
     lat1, long1, lat2, long2 = map(np.deg2rad, [lat1, long1, lat2, long2])
 
     # haversine formula
-    # shitty variable names (fix)
     dlong = long2 - long1
     dlat = lat2 - lat1
     a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlong/2)**2
     c = 2 * np.arcsin(np.sqrt(a)) 
     return c * MILES
 
-print(find_zips('40205'))
+zip_df = pd.read_csv('zip_w_lat-long.csv')
+
+# Test case
+# find_zips('40205')
