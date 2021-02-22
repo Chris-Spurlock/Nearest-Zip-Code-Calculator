@@ -42,4 +42,4 @@ def haversine_distance(lat1, long1, lat2, long2):
 zip_df = pd.read_csv('zip_w_lat-long.csv')
 
 # Test case
-# find_zips('40205')
+# find_zips('20500')
